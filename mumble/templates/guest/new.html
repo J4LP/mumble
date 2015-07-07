@@ -15,4 +15,9 @@
         {{ render_form(form, class_='form-horizontal', action_text='<i class="fa fa-fw fa-plus"></i> Add new guest pass', btn_class='btn btn-block btn-peter', action_url=url_for('GuestView:new', token=token)) }}
     </div>
 </div>
+<script>
+  $(function () {
+    $('input[name=expiration]').datetimepicker();
+  })
+</script>
 {% endblock %}
