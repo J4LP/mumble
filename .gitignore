@@ -61,7 +61,7 @@ docs/_build/
 target/
 bower_components
 typings
-mumble/static/
+mumble/public/
 node_modules
 .idea
 config.yml
