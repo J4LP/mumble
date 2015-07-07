@@ -1,0 +1,40 @@
+{% extends "_layouts/base.html" %}
+
+{% block title %}Guest Access | Mumble | {{ config.EVE.auth_name }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1><i class="fa fa-fw fa-user-plus"></i> Guest access <a href="{{ url_for('GuestView:new') }}" class="btn btn-lg pull-right btn-turquoise"><i class="fa fa-fw fa-plus"></i> New access</a></h1>
+        <hr/>
+    </div>
+    <div class="col-md-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Corporation</th>
+                    <th>Alliance</th>
+                    <th>Reason of access</th>
+                    <th>Access expires in</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Vadrin Hegirin</td>
+                    <td>Fweddit</td>
+                    <td>I Whip My Slaves Back and Forth</td>
+                    <td>Fleet by Chainsaw</td>
+                    <td>3 hours, 5 minutes, 20 seconds</td>
+                    <td>
+                        <div class="btn-group">
+                            <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-fw fa-times"></i> Expire</a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

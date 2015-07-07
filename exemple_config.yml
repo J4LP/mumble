@@ -1,0 +1,25 @@
+# Rename this to config.yml
+
+# Secret key for securing cookies.
+# Generate one with `openssl rand -base64 64`
+SECRET_KEY: SECRET
+ICE_HOST: -h localhost -p 6502
+SLICE_FILE: ../Murmur.ice
+SERVER_ID: 1
+MUMBLE_ADDRESS: mumble.dev
+MUMBLE_PORT: 64738
+EVE:
+  auth_name: Dev
+ADMIN_GROUP: Admin
+ALLOWED_FC_GROUPS:
+  - FC group
+J4OAUTH:
+  consumer_key: Foo
+  consumer_secret: Bar
+  request_token_params:
+    scope: auth_info auth_groups
+  base_url: https://j4lp.com/oauth/api/v1/
+  request_token_url: null
+  access_token_method: GET
+  access_token_url: https://j4lp.com/oauth/token
+  authorize_url: https://j4lp.com/oauth/authorize

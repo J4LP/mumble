@@ -1,0 +1,46 @@
+{% extends "_layouts/base.html" %}
+
+{% block title %}Mumble | {{ config.EVE.auth_name }}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1><i class="fa fa-fw fa-server"></i> Server {% if server.online %}<small>{{ server.users|length }} users online</small>{% endif %}</h1>
+            <hr/>
+        </div>
+        {% if not server.online %}
+            <div class="col-md-12">
+                <div class="jumbotron">
+                    <h1 class="text-danger"><i class="fa fa-fw fa-microphone-slash"></i> Offline</h1>
+                    <p>The server appears to be offline.</p>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-md-12">
+                <ul class="media-list">
+                    {% for room in server.rooms %}
+                        <li class="media">
+                            <div class="media-body">
+                                <h4 class="media-heading">{{ room.name }}</h4>
+                                <p>{{ room.description }}</p>
+                                <ul class="list-group">
+                                    {% for user in server.room_users(room) %}
+                                        <li class="list-group-item">
+                                            {% if user.mute or user.selfMute %}
+                                                <span class="badge"><i class="fa fa-fw fa-microphone-slash"></i></span>
+                                            {% endif %}
+                                            {% if user.deaf or user.selfDeaf %}
+                                                <span class="badge"><i class="fa fa-fw fa-volume-off"></i></span>
+                                            {% endif %}
+                                            {{ user.name }}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

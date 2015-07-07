@@ -1,0 +1,57 @@
+{% extends "_layouts/base.html" %}
+
+{% from 'macros.html' import render_form %}
+
+{% block title %}Guest Access | Mumble | {{ config.EVE.auth_name }}{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1><i class="fa fa-fw fa-user-plus"></i> Guest passes <a href="{{ url_for('GuestView:new') }}" class="btn btn-lg pull-right btn-turquoise"><i class="fa fa-fw fa-plus"></i> New access</a></h1>
+        <hr/>
+    </div>
+    {% if request.args.get('expired') %}
+        <div class="col-md-12">
+            <a href="{{ url_for('GuestView:admin') }}" class="btn btn-link">Show active guest passes</a>
+            <br/><br/>
+        </div>
+    {% else %}
+        <div class="col-md-12">
+            <a href="{{ url_for('GuestView:admin', expired=True) }}" class="btn btn-link">Show expired guest passes</a>
+            <br/><br/>
+        </div>
+    {% endif %}
+    <div class="col-md-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Guests</th>
+                    <th>Expires in</th>
+                    <th>Created on</th>
+                    <th>Created by</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for guest_pass in guest_passes %}
+                    <tr>
+                        <td><a href="{{ url_for('GuestView:get', pass_id=guest_pass.id) }}">{{ guest_pass.reason }}</a></td>
+                        <td>{{ guest_pass.users|length }}/{{ guest_pass.max_guests }}</td>
+                        <td>{{ guest_pass.expires_on|humanize }}</td>
+                        <td>{{ guest_pass.created_on|format_datetime }}</td>
+                        <td>{{ guest_pass.created_by.main_character }}</td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="{{ url_for('GuestView:get', pass_id=guest_pass.id) }}" class="btn btn-xs btn-info"><i class="fa fa-fw fa-info"></i> Info</a>
+                                <a href="#" class="btn btn-xs btn-danger"><i class="fa fa-fw fa-times"></i> Expire now</a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

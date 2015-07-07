@@ -1,0 +1,59 @@
+{% extends "_layouts/base.html" %}
+
+{% from 'macros.html' import render_form %}
+
+{% block title %}Guest Access | Mumble | {{ config.EVE.auth_name }}{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        {% if guest_pass.expired %}
+            <h1><i class="fa fa-fw fa-user-plus"></i> Guest Pass: <strong>{{ guest_pass.reason }} </strong> <small>Expired</small></h1>
+        {% else %}
+            <h1><i class="fa fa-fw fa-user-plus"></i> Guest Pass: <strong>{{ guest_pass.reason }} </strong> <small>Expires {{ guest_pass.expires_on|humanize }}</small> <a href="" class="btn btn-lg btn-danger pull-right"><i class="fa fa-fw fa-times"></i> Expire now</a></h1>
+        {% endif %}
+        <hr/>
+    </div>
+    <div class="col-md-12">
+        <input type="text" class="form-control" name="guest_url" readonly value="{{ url_for('GuestView:token', token=guest_pass.token) }}"/>
+        <br/>
+    </div>
+    <div class="col-md-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Corporation</th>
+                    <th>Alliance</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in guest_pass.users %}
+                <tr>
+                    <td>{{ user.name }}</td>
+                    <td><a href="http://evemaps.dotlan.net/corp/{{ user.corporation_id }}">{{ user.corporation }}</a></td>
+                    <td><a href="http://evemaps.dotlan.net/alliance/{{ user.alliance_id }}">{{ user.alliance }}</a></td>
+                    <td>
+                        {% if current_user.is_allowed %}
+                            <form action="{{ url_for('GuestView:ban_user', user_id=user.id) }}"
+                                  class="form-inline">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                <button class="btn btn-danger btn-xs"><i class="fa fa-fw fa-times"></i> Expire</button>
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+    <script>
+    $(function() {
+        $('input[name=guest_url]').on('click', function (e) {
+            $(this).select()
+        })
+    })
+    </script>
+{% endblock %}

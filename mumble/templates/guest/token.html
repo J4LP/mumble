@@ -1,0 +1,19 @@
+{% extends "_layouts/base.html" %}
+
+{% from 'macros.html' import render_form %}
+
+{% block title %}Guest Access | Mumble | {{ config.EVE.auth_name }}{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <h1><i class="fa fa-fw fa-microphone"></i> Guest pass registration</h1>
+        <hr/>
+    </div>
+
+    <div class="col-md-6 col-md-offset-3">
+        {{ render_form(form, class_='form-horizontal', action_text='<i class="fa fa-fw fa-plus"></i> Register', btn_class='btn btn-block btn-peter', action_url=url_for('GuestView:token', token=token)) }}
+    </div>
+</div>
+{% endblock %}
