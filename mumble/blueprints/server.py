@@ -6,7 +6,7 @@ from mumble.m_api import mumble_api
 
 class ServerView(FlaskView):
 
-    # decorators = [login_required]
+    decorators = [login_required]
     route_base = '/server'
 
     def index(self):
