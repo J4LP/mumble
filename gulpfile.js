@@ -16,7 +16,7 @@ var paths = {
 };
 
 gulp.task('install_fonts', function () {
-  return gulp.src('./bower_components/font-awesome/fonts/*')
+  return gulp.src(['./bower_components/font-awesome/fonts/*', './bower_components/bootstrap/fonts/*'])
     .pipe(copy('./mumble/public/fonts/', {prefix: 3}));
 })
 
