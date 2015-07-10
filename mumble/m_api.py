@@ -34,11 +34,13 @@ class Authenticator(Murmur.ServerAuthenticator):
                 if guest_user:
                     if not guest_user.password == password or guest_user.banned:
                         return RET_DENIED
+                    self.app.logger.debug('Authenticating guest with: {} {} {}'.format(int(hashlib.sha1(guest_user.id.hex).hexdigest()[:8], 16), '[{}] Guest - {}'.format(self.get_ticker(guest_user.corporation), guest_user.name), ['Guest']))
                     return int(hashlib.sha1(guest_user.id.hex).hexdigest()[:8], 16), '[{}] Guest - {}'.format(self.get_ticker(guest_user.corporation), guest_user.name), ['Guest']
                 else:
                     return RET_DENIED
             if not user.mumble_password == password:
                 return RET_DENIED
+            self.app.logger.debug('Authenticating user with: {} {} {}'.format(int(hashlib.sha1(user.user_id).hexdigest()[:8], 16), '[{}] {}'.format(self.get_ticker(user.corporation_name), user.main_character), user.groups))
             return int(hashlib.sha1(user.user_id).hexdigest()[:8], 16), '[{}] {}'.format(self.get_ticker(user.corporation_name), user.main_character), user.groups
 
     def get_ticker(self, corporation):
@@ -120,9 +122,10 @@ class ServerCallback(Murmur.ServerCallback):
         self.app = app
 
     def userConnected(self, user, current=None):
-        print('User connected')
         try:
             with self.app.app_context():
+                if user.name == 'SuperUser':
+                    return
                 if 'Guest' in user.name:
                     parsed_name = user.name.split('Guest - ')[1]
                     guest_user = GuestUser.query.filter_by(name=parsed_name).first()
