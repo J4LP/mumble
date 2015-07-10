@@ -10,9 +10,9 @@ from mumble.models import db, GuestPass, GuestUser
 
 class GuestView(FlaskView):
 
-    decorators = [login_required]
     route_base = '/guest'
 
+    @login_required
     @route('/new', methods=['GET', 'POST'])
     def new(self):
         form = GuestAccessForm()
@@ -29,6 +29,7 @@ class GuestView(FlaskView):
             return redirect(url_for('GuestView:get', pass_id=guest_pass.id))
         return render_template('guest/new.html', form=form)
 
+    @login_required
     def get(self, pass_id):
         guest_pass = GuestPass.query.get_or_404(pass_id)
         return render_template('guest/get.html', guest_pass=guest_pass)
@@ -55,7 +56,8 @@ class GuestView(FlaskView):
             return render_template('guest/user.html', guest_pass=guest_pass, guest_user=guest_user, password=password)
         return render_template('guest/token.html', guest_pass=guest_pass, token=token, form=form)
 
-    @route('/token/<token>', methods=['POST'])
+    @login_required
+    @route('/ban/<user_id>', methods=['POST'])
     def ban_user(self, user_id):
         guest_user = GuestUser.query.get_or_404(user_id)
         guest_user.banned = True
@@ -64,8 +66,7 @@ class GuestView(FlaskView):
         flash('Guest user banned and kicked from Mumble', 'success')
         return redirect(url_for('GuestView:get', pass_id=guest_user.guest_pass_id))
 
-
+    @login_required
     def admin(self):
         guest_passes = GuestPass.query.filter_by(expired=request.args.get('expired', 'False') == 'True').all()
         return render_template('guest/admin.html', guest_passes=guest_passes)
-
