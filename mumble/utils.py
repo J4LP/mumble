@@ -42,7 +42,7 @@ def humanize(date):
 
 def format_datetime(date):
     try:
-        return arrow.get(date).format('DD MMMM YYYY - HH:ss')
+        return arrow.get(date).format('DD MMMM YYYY - HH:mm')
     except Exception:
         return 'Invalid date'
 
