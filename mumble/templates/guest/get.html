@@ -16,7 +16,7 @@
         <hr/>
     </div>
     <div class="col-md-12">
-        <input type="text" class="form-control" name="guest_url" readonly value="{{ url_for('GuestView:token', token=guest_pass.token) }}"/>
+        <input type="text" class="form-control" name="guest_url" readonly value="{{ url_for('GuestView:token', token=guest_pass.token, _external=True) }}"/>
         <br/>
     </div>
     <div class="col-md-12">
