@@ -37,6 +37,8 @@ class GuestView(FlaskView):
     @route('/token/<token>', methods=['GET', 'POST'])
     def token(self, token):
         guest_pass = GuestPass.by_token(token)
+        if len(guest_pass.users) >= guest_pass.max_guests:
+            return render_template('guest/guest_pass_full.html')
         form = GuestUserForm()
         if form.validate_on_submit():
             password = binascii.b2a_hex(os.urandom(16))

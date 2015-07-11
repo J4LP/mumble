@@ -1,0 +1,18 @@
+{% extends "_layouts/base.html" %}
+
+{% from 'macros.html' import render_form %}
+
+{% block title %}Guest Access | Mumble | {{ config.EVE.auth_name }}{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <h1><i class="fa fa-fw fa-microphone"></i> Guest pass registration</h1>
+        <hr/>
+    </div>
+    <div class="col-md-6 col-md-offset-3">
+        <div class="alert alert-danger">We're sorry but this Guest Pass has reached its maximum number of users.</div>
+    </div>
+</div>
+{% endblock %}
