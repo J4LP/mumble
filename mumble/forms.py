@@ -3,6 +3,7 @@ from flask_wtf import Form
 from sqlalchemy.orm.exc import NoResultFound
 from wtforms import StringField, SelectField, TextAreaField, validators, ValidationError, SelectMultipleField
 from wtforms.fields.html5 import IntegerField, DateTimeField
+import requests
 from mumble.exceptions import InvalidCorporationError, InvalidAllianceError
 from mumble.utils import get_corporation_id_by_name, get_alliance_id_by_name
 
@@ -10,6 +11,9 @@ from mumble.utils import get_corporation_id_by_name, get_alliance_id_by_name
 def validate_corporation(form, field):
     try:
         field.corporation_id = get_corporation_id_by_name(field.data)
+    except requests.exceptions.ConnectionError:
+        field.data = None
+        return
     except InvalidCorporationError as e:
         raise ValidationError('Invalid corporation: {}'.format(e.corporation))
     except Exception as e:
@@ -18,6 +22,9 @@ def validate_corporation(form, field):
 def validate_alliance(form, field):
     try:
         field.alliance_id = get_alliance_id_by_name(field.data)
+    except requests.exceptions.ConnectionError:
+        field.data = None
+        return
     except InvalidAllianceError as e:
         raise ValidationError('Invalid alliance: {}'.format(e.alliance))
     except Exception as e:
