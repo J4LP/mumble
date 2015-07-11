@@ -3,6 +3,8 @@ import evelink
 import markdown
 import arrow
 from mumble.exceptions import InvalidCorporationError, InvalidAllianceError
+from mumble.models import redis
+from six import iteritems
 
 
 try:
@@ -53,15 +55,29 @@ def markdown_filter(content):
 
 
 def get_corporation_id_by_name(name):
-    eve = evelink.eve.EVE()
-    corporation_id = eve.character_id_from_name(name)[0]
-    if corporation_id == 0:
-        raise InvalidCorporationError(name)
-    return corporation_id
+    corporation_id = redis.hget('corporations', name.lower())
+    if not corporation_id:
+        eve = evelink.eve.EVE()
+        corporation_id = eve.character_id_from_name(name)[0]
+        if corporation_id == 0:
+            raise InvalidCorporationError(name)
+        try:
+            api = evelink.api.API()
+            corp = evelink.corp.Corp(api)
+            sheet = corp.corporation_sheet(corp_id=corporation_id)[0]
+        except evelink.api.APIError:
+            raise InvalidCorporationError(name)
+        redis.hset('corporations', sheet['name'], sheet['id'])
+    return int(corporation_id)
 
 def get_alliance_id_by_name(name):
-    eve = evelink.eve.EVE()
-    alliance_id = eve.character_id_from_name(name)[0]
-    if alliance_id == 0:
+    if not redis.exists('alliances'):
+        eve = evelink.eve.EVE()
+        alliance_map = {}
+        for alliance_id, alliance in iteritems(eve.alliances()[0]):
+            alliance_map[alliance['name'].lower()] = alliance_id
+        redis.hmset('alliances', alliance_map)
+    alliance_id = redis.hget('alliances', name.lower())
+    if not alliance_id:
         raise InvalidAllianceError(name)
-    return alliance_id
+    return int(alliance_id)

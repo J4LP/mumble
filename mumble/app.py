@@ -28,7 +28,8 @@ def create_app(config_file=None, config_object=None):
 
 
     # Database, Migration, Login and models
-    from mumble.models import db, login_manager, migrate
+    from mumble.models import db, login_manager, migrate, redis
+    redis.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
     migrate.init_app(app, db)

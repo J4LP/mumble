@@ -2,6 +2,7 @@ import arrow
 from flask.ext.login import LoginManager
 from flask.ext.migrate import Migrate
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.redis import FlaskRedis
 from sqlalchemy_utils import force_auto_coercion
 
 force_auto_coercion()
@@ -9,6 +10,7 @@ force_auto_coercion()
 db = SQLAlchemy()
 migrate = Migrate()
 login_manager = LoginManager()
+redis = FlaskRedis()
 
 from .user import User
 from .guest import GuestPass, GuestUser
@@ -30,4 +32,3 @@ def load_user(user_id):
 # @db.event.listens_for(Structure, 'before_update', propagate=True)
 # def timestamp_before_update(mapper, connection, target):
 #     target.updated_on = arrow.utcnow()
-

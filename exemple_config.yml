@@ -8,6 +8,7 @@ SLICE_FILE: ../Murmur.ice
 SERVER_ID: 1
 MUMBLE_ADDRESS: mumble.dev
 MUMBLE_PORT: 64738
+REDIS_URL: redis://:password@localhost:6379/0
 EVE:
   auth_name: Dev
 ADMIN_GROUP: Admin
