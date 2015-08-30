@@ -18,7 +18,7 @@
     </div>
     {% endif %}
 {% endwith %}
-{% if not current_user.mumble_password %}
+{% if current_user.is_authenticated() and not current_user.mumble_password %}
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
